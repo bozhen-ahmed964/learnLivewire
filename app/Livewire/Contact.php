@@ -16,29 +16,32 @@ class Contact extends Component
     public function save()
     {
 
-
-        dd('hello');
-
         $this->validate(
             [
-                'user_name' => 'required | string | max:255',
+                'user_name' => 'required | string | max:255 | unique:users,name',
                 'user_email' => 'required | string | max:255',
                 'user_password' => 'required | string | max:255',
             ]
         );
 
+
          User::create([
-            'user_name' => $this->user_name,
-            'user_email' => $this->user_email,
-            'user_password' => $this->user_password,
+            'name' => $this->user_name,
+            'email' => $this->user_email,
+            'password' => $this->user_password,
          ]);
-         $this->rest();
+
+
          return redirect()->back();
+
     }
 
 
     public function render()
     {
-        return view('livewire.contact');
+        $users = User::all();
+        return view('livewire.contact' , [
+            'users' => $users,
+        ]);
     }
 }
